@@ -1,6 +1,7 @@
-
+// src/pages/ContactoPage.js
 
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { Container, Form, Button, Card, Row, Col } from 'react-bootstrap';
 
 function ContactoPage() {
@@ -39,7 +40,7 @@ function ContactoPage() {
                   <Form.Label>Mensaje</Form.Label>
                   <Form.Control as="textarea" rows={5} placeholder="Escribe tu mensaje aquí..." />
                 </Form.Group>
-                
+
                 <Button variant="primary" type="submit" className="w-100 mt-3">
                   Enviar Mensaje
                 </Button>

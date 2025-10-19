@@ -10,6 +10,7 @@ import CatalogoPage from './pages/CatalogoPage';
 import LoginPage from './pages/LoginPage';       
 import ContactoPage from './pages/ContactoPage'; 
 import RegistroPage from './pages/RegistroPage';
+import ProductoDetallePage from './pages/ProductoDetallePage'; 
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />         
             <Route path="/contacto" element={<ContactoPage />} />   
             <Route path="/registro" element={<RegistroPage />} />
+            <Route path="/producto/:productoId" element={<ProductoDetallePage />} />
             
           </Routes>
         </main>
