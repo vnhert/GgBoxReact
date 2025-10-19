@@ -1,4 +1,4 @@
-// src/components/ProductCard.js
+
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 

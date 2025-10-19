@@ -7,8 +7,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
 import HomePage from './pages/HomePage';
 import CatalogoPage from './pages/CatalogoPage';
-import LoginPage from './pages/LoginPage';       // <-- 1. Importa Login
-import ContactoPage from './pages/ContactoPage'; // <-- 1. Importa Contacto
+import LoginPage from './pages/LoginPage';       
+import ContactoPage from './pages/ContactoPage'; 
+import RegistroPage from './pages/RegistroPage';
 
 function App() {
   return (
@@ -20,11 +21,10 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/catalogo" element={<CatalogoPage />} />
             <Route path="/catalogo/:category" element={<CatalogoPage />} />
-            <Route path="/login" element={<LoginPage />} />         {/* <-- 2. Añade la ruta */}
-            <Route path="/contacto" element={<ContactoPage />} />   {/* <-- 2. Añade la ruta */}
-            {/* Próximamente:
+            <Route path="/login" element={<LoginPage />} />         
+            <Route path="/contacto" element={<ContactoPage />} />   
             <Route path="/registro" element={<RegistroPage />} />
-            */}
+            
           </Routes>
         </main>
       </div>

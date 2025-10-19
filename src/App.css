@@ -1,8 +1,6 @@
-/* src/App.css */
 
-/* --- ESTILOS GENERALES Y PERSONALIZADOS --- */
 body {
-    /* Usamos !important para asegurarnos de que sobreescriba cualquier estilo de Bootstrap si es necesario */
+  
     background-color: #0d1117 !important;
 }
 
@@ -16,12 +14,12 @@ body {
     filter: brightness(0.7);
 }
 
-/* --- DISEÑO PREMIUM DE TARJETA DE PRODUCTO --- */
+
 .product-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #161b22 !important; /* Estilo de fondo para las tarjetas */
+    background-color: #161b22 !important; 
     border: 1px solid #30363d;
-    text-align: left; /* Alineamos el texto de la tarjeta a la izquierda */
+    text-align: left; 
 }
 
 .product-card:hover {
@@ -38,7 +36,7 @@ body {
 }
 
 .product-card:hover .card-img-top {
-    transform: scale(1.05); /* Un zoom más sutil */
+    transform: scale(1.05); 
 }
 
 .product-card .card-body {

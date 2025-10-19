@@ -1,10 +1,10 @@
-// src/pages/LoginPage.js
+
 
 import React from 'react';
 import { Container, Form, Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-// El nombre de la función es LoginPage
+
 function LoginPage() {
   return (
     <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
@@ -35,5 +35,5 @@ function LoginPage() {
   );
 }
 
-// Esta es la exportación que lo hace funcionar
+
 export default LoginPage;

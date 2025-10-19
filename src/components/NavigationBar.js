@@ -1,15 +1,15 @@
-// src/components/NavigationBar.js
+
 
 import React from 'react';
 import { Navbar, Nav, Container, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
-// Usamos 'Link' de react-router-dom para una navegación rápida sin recargar la página
+
 import { Link } from 'react-router-dom';
 
 function NavigationBar() {
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
       <Container>
-        {/* Usamos 'as={Link}' para que los elementos de Bootstrap se comporten como enlaces de React Router */}
+      
         <Navbar.Brand as={Link} to="/">GGBOX</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -24,7 +24,7 @@ function NavigationBar() {
             </NavDropdown>
             <Nav.Link as={Link} to="/login">Login</Nav.Link>
             
-            {/* 👇 ¡AQUÍ ESTÁ LA LÍNEA QUE FALTABA! 👇 */}
+            
             <Nav.Link as={Link} to="/contacto">Contacto</Nav.Link>
 
           </Nav>

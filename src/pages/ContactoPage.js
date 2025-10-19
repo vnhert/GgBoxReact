@@ -1,4 +1,4 @@
-// src/pages/ContactoPage.js
+
 
 import React from 'react';
 import { Container, Form, Button, Card, Row, Col } from 'react-bootstrap';
