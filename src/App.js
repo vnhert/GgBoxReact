@@ -44,11 +44,13 @@ function App() {
     // Función que la NavigationBar llama cuando el usuario busca algo
     const handleSearchSubmit = (term) => {
         setSearchTerm(term);
-        // NOTA: No necesitamos navegar explícitamente, la ruta /catalogo
-        // ya se renderiza en caso de que se actualicen los filtros.
+        
+    };
+    const clearSearch = () => {
+        setSearchTerm('');
     };
 
-    // 🌟 Lógica de Filtrado Central: Aplica el filtro de búsqueda a la lista completa
+    // Lógica de Filtrado Central: Aplica el filtro de búsqueda a la lista completa
     const filteredProducts = useMemo(() => {
         if (!searchTerm) {
             return productsData;

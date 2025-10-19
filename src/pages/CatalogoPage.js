@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-// Asegúrate de que esta ruta sea correcta para el componente de tarjeta de producto
 import ProductCard from '../components/ProductCard'; 
-// NOTA: Ya no importamos productsData, lo recibimos como prop desde App.js
+
 
 // Este componente ahora recibe la lista de productos ya filtrada por el término de búsqueda
 function CatalogoPage({ products = [] }) {

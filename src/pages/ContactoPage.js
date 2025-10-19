@@ -1,5 +1,3 @@
-// src/pages/ContactoPage.js
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Form, Button, Card, Row, Col } from 'react-bootstrap';

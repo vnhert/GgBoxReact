@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Container, Row, Col, Carousel } from 'react-bootstrap';
 import productsData from '../data/productos.js';

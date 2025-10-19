@@ -1,5 +1,3 @@
-// src/pages/RegistroPage.js
-
 import React from 'react';
 import { Container, Form, Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -44,5 +42,5 @@ function RegistroPage() {
   );
 }
 
-// 👇 Esta es la línea clave que probablemente faltaba o estaba incorrecta.
+
 export default RegistroPage;

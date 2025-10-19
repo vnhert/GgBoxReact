@@ -30,7 +30,7 @@ function NavigationBar({ carrito = [], onSearchSubmit, onClearSearch }) {
         // Esto funciona incluso si ya estás en /catalogo
         navigate('/catalogo');
         
-        // Opcional: limpiar el campo de texto después de enviar la búsqueda
+        // limpiar el campo de texto después de enviar la búsqueda
         setSearchText('');
     };
 
@@ -47,7 +47,7 @@ function NavigationBar({ carrito = [], onSearchSubmit, onClearSearch }) {
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
                         
-                        {/* 🎯 Implementación del Reset: 
+                        {/* Implementación del Reset: 
                             Llama a onClearSearch al hacer clic en "Catálogo" 
                             para restablecer la lista completa de productos.
                         */}
@@ -56,14 +56,11 @@ function NavigationBar({ carrito = [], onSearchSubmit, onClearSearch }) {
                         </Nav.Link>
                         
                         <NavDropdown title="Categorías" id="basic-nav-dropdown">
-                            {/* 🔥 CORREGIDO: Ahora las categorías también llaman a onClearSearch. 
-                                Esto asegura que el filtro global de búsqueda se reinicie 
-                                antes de aplicar el filtro de categoría.
-                            */}
+                           
                             <NavDropdown.Item as={Link} to="/catalogo/monitor" onClick={onClearSearch}>Monitores</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/catalogo/teclado" onClick={onClearSearch}>Teclados</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/catalogo/mouse" onClick={onClearSearch}>Mouses</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/catalogo/grafica" onClick={onClearSearch}>Tarjetas Gráficas</NavDropdown.Item>
+                           <NavDropdown.Item as={Link} to="/catalogo/grafica" onClick={onClearSearch}>Tarjetas Gráficas</NavDropdown.Item>
                         </NavDropdown>
                         <Nav.Link as={Link} to="/login">Login</Nav.Link> 
                         <Nav.Link as={Link} to="/contacto">Contacto</Nav.Link>

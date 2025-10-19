@@ -16,7 +16,7 @@ function ProductCard({ product }) {
           <Card.Text as="h5" className="mt-auto">$ {product.precio.toLocaleString('es-CL')}</Card.Text>
         </Card.Body>
         <Card.Footer>
-          {/* El botón ahora es más visual, el click lo captura la tarjeta */}
+          {/* El el click lo captura la tarjeta */}
           <Button variant="primary" className="w-100" as="div" style={{ pointerEvents: 'none' }}>
             Ver Detalles
           </Button>
