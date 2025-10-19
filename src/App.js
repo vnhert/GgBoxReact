@@ -12,8 +12,10 @@ import ContactoPage from './pages/ContactoPage';
 import RegistroPage from './pages/RegistroPage';
 import ProductoDetallePage from './pages/ProductoDetallePage'; 
 
+
 function App() {
   return (
+   
     <Router>
       <div className="App bg-dark">
         <NavigationBar />
@@ -31,6 +33,7 @@ function App() {
         </main>
       </div>
     </Router>
+   
   );
 }
 
