@@ -1,38 +1,47 @@
+/* src/App.css */
+
+/* --- ESTILOS GENERALES Y PERSONALIZADOS --- */
+body {
+    /* Usamos !important para asegurarnos de que sobreescriba cualquier estilo de Bootstrap si es necesario */
+    background-color: #0d1117 !important;
+}
+
 .App {
-  text-align: center;
+    text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.carousel-item img {
+    height: 45vh;
+    object-fit: cover;
+    filter: brightness(0.7);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* --- DISEÑO PREMIUM DE TARJETA DE PRODUCTO --- */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #161b22 !important; /* Estilo de fondo para las tarjetas */
+    border: 1px solid #30363d;
+    text-align: left; /* Alineamos el texto de la tarjeta a la izquierda */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 40px rgba(13, 110, 253, 0.25);
 }
 
-.App-link {
-  color: #61dafb;
+.product-card .card-img-top {
+    height: 200px;
+    object-fit: contain;
+    background-color: #0d1117;
+    padding: 1rem;
+    transition: transform 0.4s ease;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.product-card:hover .card-img-top {
+    transform: scale(1.05); /* Un zoom más sutil */
+}
+
+.product-card .card-body {
+    background-color: #161b22;
+    border-top: none;
 }
