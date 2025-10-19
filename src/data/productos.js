@@ -1,6 +1,4 @@
 
-
-
 import monitorGear from '../img/monitor/1.png';
 import samsungOdyssey from '../img/monitor/2.png';
 import xiaomiG from '../img/monitor/3.png';
