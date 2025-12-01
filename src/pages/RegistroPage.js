@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
-// Importamos 'Alert' para los mensajes
-import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
+// Importamos 'Alert' y 'Spinner' para los mensajes y la carga
+import { Container, Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
+// URL base de tu API de Spring Boot
+const BASE_API_URL = "http://localhost:8080/api/usuarios"; 
 
 function RegistroPage() {
   // --- Estados para los campos ---
   const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(''); // Usado como 'nombre' para la API
   const [password, setPassword] = useState('');
 
-  // --- Estados para los mensajes ---
+  // --- Estados para los mensajes y la carga ---
   const [error, setError] = useState(null); // Un solo estado para todos los errores
   const [successMessage, setSuccessMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para la carga
 
   /**
-   * Manejador para el envío del formulario
+   * Manejador para el envío del formulario. Ahora asíncrono.
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     // 1. Evita que la página se recargue
     e.preventDefault(); 
     
@@ -24,41 +28,67 @@ function RegistroPage() {
     setSuccessMessage(null);
     setError(null);
 
-    // --- 3. Validación (la parte que pediste) ---
+    // --- 3. Validación Inicial (Mejor UX) ---
     
-    // Revisamos el nombre de usuario
     if (!username) {
       setError('Debes ingresar un nombre de usuario.');
-      return; // Detiene la ejecución
+      return; 
     }
-
-    // Revisamos el email
     if (!email.includes('@')) {
       setError('Por favor, ingresa un correo electrónico válido (debe tener @).');
-      return; // Detiene la ejecución
+      return; 
     }
-    
-    // Revisamos la contraseña
     if (password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres.');
-      return; // Detiene la ejecución
+      return; 
     }
 
-    // --- 4. Si llegamos aquí, todo es VÁLIDO ---
-    
-    console.log('Enviando datos de registro:', { email, username, password });
+    // --- 4. Llamada a la API ---
+    setIsLoading(true);
 
-    // Mostramos el mensaje de éxito
-    setSuccessMessage('¡Registrado con éxito!');
-    
-    // Limpiamos el formulario
-    setEmail('');
-    setUsername('');
-    setPassword('');
+    try {
+      const response = await fetch(BASE_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Mapeamos el 'username' del estado al campo 'nombre' que el backend de Spring Boot espera
+        body: JSON.stringify({ 
+          nombre: username, 
+          email: email, 
+          password: password 
+        }),
+      });
+
+      if (response.ok) {
+        // Registro exitoso (Esperamos 201 Created del backend)
+        setSuccessMessage('¡Registro exitoso! Ahora puedes iniciar sesión.');
+        
+        // Limpiamos el formulario
+        setEmail('');
+        setUsername('');
+        setPassword('');
+      } else if (response.status === 409) {
+        // Email duplicado (Conflict)
+        const conflictMessage = await response.text();
+        setError(conflictMessage || "Error: El email ya está registrado.");
+      } else {
+        // Otro error del servidor (ej: 500)
+        const errorDetail = await response.text();
+        setError(`Error en el servidor (${response.status}). Detalle: ${errorDetail}`);
+      }
+    } catch (err) {
+      // Error de red (servidor caído o CORS)
+      console.error("Error de conexión:", err);
+      setError("No se pudo conectar con el servidor API. Verifica la URL y si el servidor está activo.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+      {/* Mantenemos el estilo oscuro original */}
       <Card bg="dark" text="white" style={{ width: '25rem' }}>
         <Card.Body>
           <h2 className="text-center mb-4">Crear Cuenta</h2>
@@ -78,6 +108,7 @@ function RegistroPage() {
           )}
 
           {/* Le pasamos el 'handleSubmit' al 'onSubmit' del Form */}
+          {/* El formulario y los campos se deshabilitan durante la carga */}
           <Form onSubmit={handleSubmit}>
             
             {/* --- CAMPO EMAIL --- */}
@@ -87,9 +118,9 @@ function RegistroPage() {
                 type="email" 
                 placeholder="Ingresa tu email" 
                 value={email}
-                // Actualizamos el estado cada vez que el usuario escribe
                 onChange={(e) => setEmail(e.target.value)} 
                 required 
+                disabled={isLoading}
               />
             </Form.Group>
 
@@ -102,6 +133,7 @@ function RegistroPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required 
+                disabled={isLoading}
               />
             </Form.Group>
 
@@ -114,11 +146,32 @@ function RegistroPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required 
+                disabled={isLoading}
               />
             </Form.Group>
             
-            <Button variant="primary" type="submit" className="w-100 mt-3">
-              Registrarse
+            {/* El botón ahora muestra un spinner y se deshabilita durante la carga */}
+            <Button 
+              variant="primary" 
+              type="submit" 
+              className="w-100 mt-3"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="me-2"
+                  />
+                  Registrando...
+                </>
+              ) : (
+                'Registrarse'
+              )}
             </Button>
           </Form>
           
