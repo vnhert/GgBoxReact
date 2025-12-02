@@ -1,43 +1,57 @@
-import React, { useState } from 'react'; 
-import { Container, Form, Button, Card, Alert } from 'react-bootstrap'; 
-import { Link } from 'react-router-dom';
-
+import React, { useState } from 'react';
+import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-
   
-  const handleSubmit = (e) => {
-    e.preventDefault(); 
-    
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => { 
+    e.preventDefault();
     setError(null);
     setSuccessMessage(null);
 
     if (!email || !password) {
       setError('Debes ingresar un correo y una contraseña.');
-      return; 
+      return;
     }
 
-    const USUARIO_CORRECTO = 'user@test.com';
-    const PASSWORD_CORRECTA = 'password123';
+    try {
+      console.log("Intentando conectar con Backend...");
+      const response = await fetch('http://localhost:8080/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            username: email, 
+            password: password 
+        }),
+      });
 
-    if (email === USUARIO_CORRECTO && password === PASSWORD_CORRECTA) {
-     
-      setSuccessMessage('¡Inicio de sesión exitoso!');
-      setError(null);
-      
- 
-      setEmail('');
-      setPassword('');
 
+      if (response.ok) {
+        const data = await response.json();
+        setSuccessMessage('¡Inicio de sesión exitoso!');
+        localStorage.setItem('token', data.jwt);
+        localStorage.setItem('role', data.role);
+        console.log("Login OK. Rol recibido:", data.role);
+        
 
-      
-    } else {
-    
-      setError('Correo o contraseña incorrectos.');
+        navigate('/catalogo');
+        
+      } else {
+        console.log("Error del servidor:", response.status);
+        setError('Credenciales incorrectas');
+      }
+
+    } catch (err) {
+      console.error("Error de red:", err);
+      console.error(err);
+      setError('Error de conexión con el servidor');
     }
   };
 

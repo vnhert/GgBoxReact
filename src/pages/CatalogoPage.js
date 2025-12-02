@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useMemo, useState, useEffect } from 'react';
+import { Container, Row, Col, Alert, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard'; 
 
@@ -8,6 +8,15 @@ import ProductCard from '../components/ProductCard';
 function CatalogoPage({ products = [] }) {
     // Usamos useParams para obtener el parámetro de la URL (e.g., /catalogo/monitor)
     const { category } = useParams();
+
+    const [esAdmin, setEsAdmin] = useState(false);
+
+    useEffect(() => {
+        const role = localStorage.getItem('role');
+        if (role === 'ADMIN') {
+            setEsAdmin(true);
+        }
+    }, []);
 
     // 1. Aplicar el filtro de categoría sobre la lista que ya viene filtrada por búsqueda
     const displayedProducts = useMemo(() => {
@@ -32,6 +41,25 @@ function CatalogoPage({ products = [] }) {
 
     return (
         <Container className="mt-4">
+
+            {esAdmin && (
+                <Alert variant="warning" className="mb-4 border-warning">
+                    <Alert.Heading>🛠️ Panel de Administrador</Alert.Heading>
+                    <p className="mb-0">
+                        Tienes permisos de edición activos. Estás viendo el catálogo como administrador.
+                    </p>
+                    <hr />
+                    <div className="d-flex justify-content-end">
+                        <Button variant="dark" size="sm" className="me-2">
+                            + Agregar Nuevo Producto
+                        </Button>
+                        <Button variant="outline-dark" size="sm">
+                            Gestionar Inventario
+                        </Button>
+                    </div>
+                </Alert>
+            )}
+            
             <h2 className="text-white">{title}</h2>
             
             {displayedProducts.length === 0 ? (

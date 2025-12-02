@@ -4,7 +4,7 @@ import { Container, Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // URL base de tu API de Spring Boot
-const BASE_API_URL = "http://localhost:8080/api/usuarios"; 
+const BASE_API_URL = "http://localhost:8080/api/auth/register"; 
 
 function RegistroPage() {
   // --- Estados para los campos ---
@@ -54,7 +54,7 @@ function RegistroPage() {
         },
         // Mapeamos el 'username' del estado al campo 'nombre' que el backend de Spring Boot espera
         body: JSON.stringify({ 
-          nombre: username, 
+          username: username, 
           email: email, 
           password: password 
         }),
