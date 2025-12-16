@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  
+
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccessMessage(null);
@@ -21,14 +22,15 @@ function LoginPage() {
 
     try {
       console.log("Intentando conectar con Backend...");
-      const response = await fetch('http://localhost:8080/api/auth/login', {
+      // 💡 CAMBIO CLAVE: Cambiado de 172.31.31.239 a la IP de Backend permitida (54.86.25.1)
+      const response = await fetch('http://54.86.25.1:8080/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-            username: email, 
-            password: password 
+        body: JSON.stringify({
+            username: email,
+            password: password
         }),
       });
 
@@ -39,10 +41,10 @@ function LoginPage() {
         localStorage.setItem('token', data.jwt);
         localStorage.setItem('role', data.role);
         console.log("Login OK. Rol recibido:", data.role);
-        
+
 
         navigate('/catalogo');
-        
+
       } else {
         console.log("Error del servidor:", response.status);
         setError('Credenciales incorrectas');
@@ -77,29 +79,29 @@ function LoginPage() {
 
           {/* */}
           <Form onSubmit={handleSubmit}>
-            
+
             {/* CAMPO EMAIL */}
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Correo Electrónico</Form.Label>
-              <Form.Control 
-                type="email" 
+              <Form.Control
+                type="email"
                 placeholder="Ingresa tu email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)} 
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Group>
 
             {/*CAMPO CONTRASEÑA*/}
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Contraseña</Form.Label>
-              <Form.Control 
-                type="password" 
+              <Form.Control
+                type="password"
                 placeholder="Contraseña"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)} 
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
-            
+
             <Button variant="primary" type="submit" className="w-100 mt-3">
               Ingresar
             </Button>

@@ -1,33 +1,72 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Importación de tu lista de productos real
-import productsData from './data/productos.js'; 
-
-// Componentes y Páginas
+// Componentes y Páginas: TODOS LOS IMPORTS DEBEN IR JUNTOS AL INICIO
 import NavigationBar from './components/NavigationBar';
 import HomePage from './pages/HomePage';
 import CatalogoPage from './pages/CatalogoPage';
-import LoginPage from './pages/LoginPage';     
-import ContactoPage from './pages/ContactoPage'; 
+import LoginPage from './pages/LoginPage';
+import ContactoPage from './pages/ContactoPage';
 import RegistroPage from './pages/RegistroPage';
-import ProductoDetallePage from './pages/ProductoDetallePage';  
+import ProductoDetallePage from './pages/ProductoDetallePage';
 import Cartpage from './pages/Cartpage';
 
+// ----------------------------------------------------
+// LAS CONSTANTES COMO LA URL DEBEN IR DESPUÉS DE LOS IMPORTS
+// ----------------------------------------------------
+const API_BASE_URL = 'http://172.31.31.239:8080/api';
+// No necesitamos la importación de datos locales ahora:
+// import productsData from './data/productos.js'; // Línea comentada, ¡bien!
+
+
 function App() {
-    // 1. Estado del carrito
+    // 1. Estados para el carrito y búsqueda (ya existían)
     const [carrito, setCarrito] = useState([]);
-    // 2. Estado para el término de búsqueda
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Lógica para agregar un producto al carrito
+    // 2. NUEVOS ESTADOS para manejar productos reales de la API
+    const [productsData, setProductsData] = useState([]); // Almacena todos los productos de la API
+    const [loading, setLoading] = useState(true); // Para mostrar una pantalla de carga
+    const [error, setError] = useState(null); // Para manejar errores de API
+
+    // ----------------------------------------------------
+    // LÓGICA DE CARGA DE PRODUCTOS DESDE LA API (useEffect)
+    // ----------------------------------------------------
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                // Petición GET a la ruta de productos de Spring Boot
+                const response = await fetch(`${API_BASE_URL}/productos`);
+
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: No se pudo cargar el catálogo.`);
+                }
+
+                const data = await response.json();
+
+                // El backend puede devolver IDs numéricos. Aseguramos que la estructura sea correcta.
+                setProductsData(data);
+
+            } catch (err) {
+                console.error("Fallo al obtener productos:", err);
+                setError("Fallo al cargar productos desde el servidor.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []); // El array vacío asegura que esto se ejecute SOLO una vez al montar
+
+    // Lógica para agregar un producto al carrito (sin cambios)
     const agregarAlCarrito = (productoAAgregar) => {
         const existe = carrito.find(item => item.id === productoAAgregar.id);
 
         if (existe) {
-            // Si existe, aumentamos la cantidad
             setCarrito(
                 carrito.map(item =>
                     item.id === productoAAgregar.id
@@ -36,21 +75,19 @@ function App() {
                 )
             );
         } else {
-            // Si no existe, lo agregamos con cantidad inicial 1
             setCarrito([...carrito, { ...productoAAgregar, cantidad: 1 }]);
         }
     };
-    
-    // Función que la NavigationBar llama cuando el usuario busca algo
+
+    // Función de búsqueda (sin cambios)
     const handleSearchSubmit = (term) => {
         setSearchTerm(term);
-        
     };
     const clearSearch = () => {
         setSearchTerm('');
     };
 
-    // Lógica de Filtrado Central: Aplica el filtro de búsqueda a la lista completa
+    // Lógica de Filtrado Central (usa productsData cargado de la API)
     const filteredProducts = useMemo(() => {
         if (!searchTerm) {
             return productsData;
@@ -63,37 +100,46 @@ function App() {
             product.nombre.toLowerCase().includes(lowerCaseTerm) ||
             product.descripcion.toLowerCase().includes(lowerCaseTerm)
         );
-    }, [searchTerm]);
+    }, [searchTerm, productsData]);
+
+    if (loading) {
+        return <h1 className="text-center text-white mt-5">Cargando Productos...</h1>;
+    }
+
+    if (error) {
+        return <h1 className="text-center text-danger mt-5">Error: {error}</h1>;
+    }
+
 
     return (
         <Router>
             <div className="App bg-dark">
-                {/* 1. Pasamos el carrito y la función de búsqueda a la barra de navegación */}
-                <NavigationBar 
-                    carrito={carrito} 
-                    onSearchSubmit={handleSearchSubmit} 
-                    onClearSearch={clearSearch} 
-                /> 
+                <NavigationBar
+                    carrito={carrito}
+                    onSearchSubmit={handleSearchSubmit}
+                    onClearSearch={clearSearch}
+                />
                 <main className="py-3">
                     <Routes>
                         <Route path="/" element={<HomePage />} />
-                        
-                        {/* 2. Pasamos la lista de productos filtrados a CatalogoPage en ambas rutas */}
+
+                        {/* 3. Pasamos la lista de productos filtrados y cargados de la API */}
                         <Route path="/catalogo" element={<CatalogoPage products={filteredProducts} />} />
                         <Route path="/catalogo/:category" element={<CatalogoPage products={filteredProducts} />} />
-                        
-                        <Route path="/login" element={<LoginPage />} />        
-                        <Route path="/contacto" element={<ContactoPage />} />    
+
+                        {/* 4. El login y registro ya tienen la URL corregida */}
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/contacto" element={<ContactoPage />} />
                         <Route path="/registro" element={<RegistroPage />} />
-                        
-                        <Route 
-                            path="/producto/:productoId" 
-                            element={<ProductoDetallePage onAgregarAlCarrito={agregarAlCarrito} />} 
+
+                        <Route
+                            path="/producto/:productoId"
+                            element={<ProductoDetallePage products={productsData} onAgregarAlCarrito={agregarAlCarrito} />}
                         />
 
-                        <Route 
-                            path="/carrito" 
-                            element={<Cartpage carrito={carrito} setCarrito={setCarrito} />} 
+                        <Route
+                            path="/carrito"
+                            element={<Cartpage carrito={carrito} setCarrito={setCarrito} />}
                         />
                     </Routes>
                 </main>

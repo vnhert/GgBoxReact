@@ -4,7 +4,8 @@ import { Container, Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // URL base de tu API de Spring Boot
-const BASE_API_URL = "http://localhost:8080/api/auth/register"; 
+// 💡 CAMBIO CLAVE: Cambiado de 172.31.31.239 a la IP de Backend permitida (54.86.25.1)
+const BASE_API_URL = "http://54.86.25.1:8080/api/auth/register";
 
 function RegistroPage() {
   // --- Estados para los campos ---
@@ -22,25 +23,25 @@ function RegistroPage() {
    */
   const handleSubmit = async (e) => {
     // 1. Evita que la página se recargue
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
     // 2. Limpiamos mensajes anteriores
     setSuccessMessage(null);
     setError(null);
 
     // --- 3. Validación Inicial (Mejor UX) ---
-    
+
     if (!username) {
       setError('Debes ingresar un nombre de usuario.');
-      return; 
+      return;
     }
     if (!email.includes('@')) {
       setError('Por favor, ingresa un correo electrónico válido (debe tener @).');
-      return; 
+      return;
     }
     if (password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres.');
-      return; 
+      return;
     }
 
     // --- 4. Llamada a la API ---
@@ -53,17 +54,17 @@ function RegistroPage() {
           'Content-Type': 'application/json',
         },
         // Mapeamos el 'username' del estado al campo 'nombre' que el backend de Spring Boot espera
-        body: JSON.stringify({ 
-          username: username, 
-          email: email, 
-          password: password 
+        body: JSON.stringify({
+          username: username,
+          email: email,
+          password: password
         }),
       });
 
       if (response.ok) {
         // Registro exitoso (Esperamos 201 Created del backend)
         setSuccessMessage('¡Registro exitoso! Ahora puedes iniciar sesión.');
-        
+
         // Limpiamos el formulario
         setEmail('');
         setUsername('');
@@ -110,16 +111,16 @@ function RegistroPage() {
           {/* Le pasamos el 'handleSubmit' al 'onSubmit' del Form */}
           {/* El formulario y los campos se deshabilitan durante la carga */}
           <Form onSubmit={handleSubmit}>
-            
+
             {/* --- CAMPO EMAIL --- */}
             <Form.Group className="mb-3" controlId="formRegisterEmail">
               <Form.Label>Correo Electrónico</Form.Label>
-              <Form.Control 
-                type="email" 
-                placeholder="Ingresa tu email" 
+              <Form.Control
+                type="email"
+                placeholder="Ingresa tu email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
+                onChange={(e) => setEmail(e.target.value)}
+                required
                 disabled={isLoading}
               />
             </Form.Group>
@@ -127,12 +128,12 @@ function RegistroPage() {
             {/* --- CAMPO NOMBRE DE USUARIO --- */}
             <Form.Group className="mb-3" controlId="formRegisterUsername">
               <Form.Label>Nombre de Usuario</Form.Label>
-              <Form.Control 
-                type="text" 
-                placeholder="Elige un nombre de usuario" 
+              <Form.Control
+                type="text"
+                placeholder="Elige un nombre de usuario"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                required 
+                required
                 disabled={isLoading}
               />
             </Form.Group>
@@ -140,20 +141,20 @@ function RegistroPage() {
             {/* --- CAMPO CONTRASEÑA --- */}
             <Form.Group className="mb-3" controlId="formRegisterPassword">
               <Form.Label>Contraseña</Form.Label>
-              <Form.Control 
-                type="password" 
-                placeholder="Crea una contraseña" 
+              <Form.Control
+                type="password"
+                placeholder="Crea una contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required 
+                required
                 disabled={isLoading}
               />
             </Form.Group>
-            
+
             {/* El botón ahora muestra un spinner y se deshabilita durante la carga */}
-            <Button 
-              variant="primary" 
-              type="submit" 
+            <Button
+              variant="primary"
+              type="submit"
               className="w-100 mt-3"
               disabled={isLoading}
             >
@@ -174,7 +175,7 @@ function RegistroPage() {
               )}
             </Button>
           </Form>
-          
+
           <div className="text-center mt-3">
             <p>¿Ya tienes una cuenta? <Link to="/login">Inicia sesión aquí</Link></p>
           </div>
